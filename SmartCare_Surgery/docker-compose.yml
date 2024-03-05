@@ -32,12 +32,14 @@ services:
     # Port mapping
     # This means that the port 5432 of the host will be mapped to the port 5432 of the container.
     ports:
-      - "3306:3306"
+      - "3307:3307"
     # Environment variables
     environment:
-      MYSQL_ROOT_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: todo
+      MYSQL_ROOT_PASSWORD: 'davemtork'
+      MYSQL_PASSWORD: 'davemtork'
+      MYSQL_USER: 'user'
+      MYSQL_DATABASE: 'todo'
+      MYSQL_TCP_PORT: '3307'
     # Restart policy
     restart: unless-stopped
     # Volume mapping

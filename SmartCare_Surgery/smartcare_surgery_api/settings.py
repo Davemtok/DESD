@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'smartcare_surgery_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "smartcaresurgery",
+        'NAME': "todo",
         "USER": "root",
-        "PASSWORD": "postgres",
+        "PASSWORD": "davemtork",
         "HOST": "db",
-        "PORT": "3306",  
+        "PORT": "3307",
     }
 }
 
