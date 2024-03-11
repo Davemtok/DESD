@@ -6,6 +6,17 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 
+def home(request):
+    return HttpResponse("Hello, World!")
+
+def signup(request):
+    return render(request, "smartcare_app/signup.html")
+
+def signin(request):
+    return render(request, "smartcare_app/signin.html")
+
+def signout(request):
+    pass
 
 def tasks(request):
     """

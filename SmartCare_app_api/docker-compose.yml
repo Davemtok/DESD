@@ -37,7 +37,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: todo
+      POSTGRES_DB: db
     # Restart policy
     restart: unless-stopped
     # Volume mapping
