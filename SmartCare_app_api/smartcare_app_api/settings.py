@@ -1,3 +1,4 @@
+import os
 """
 Django settings for smartcare_app_api project.
 
@@ -11,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+inside_docker = os.path.exists('/.dockerenv')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'smartcare_app_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,22 +77,31 @@ WSGI_APPLICATION = 'smartcare_app_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'db',  # Matches POSTGRES_DB
+#         'USER': 'postgres',  # Matches POSTGRES_USER
+#         'PASSWORD': 'postgres',  # Matches POSTGRES_PASSWORD
+#         'HOST': 'db',  # Matches the service name
+#         'PORT': '5432',
+#     }
+# }
+
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": "todo",
-        # Database user
-        "USER": "postgres",
-        # User's password
-        "PASSWORD": "postgres",
-        # Database host
-        # In this case, we are using the name of the service defined in the docker-compose.yml file.
-        "HOST": "db",
-        # Database port
-        # In this case, we are using the default port for PostgreSQL specified in the docker-compose.yml file.
-        "PORT": 5432,
+        'NAME': os.getenv('DB_NAME', 'db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        'HOST': 'db' if inside_docker else 'localhost',
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
+
+
 
 
 # Password validation
