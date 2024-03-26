@@ -14,7 +14,8 @@ from smartcare_app_api import settings
 from django.core.mail import send_mail
 
 
-def home(request):
+
+def Home(request):
     return render(request, "authentication/index.html")
 
 def signup(request):
@@ -28,7 +29,7 @@ def signup(request):
         
         if User. objects.filter(username=username).exists():
             messages.error(request, "Username already exists!! Please try another username.")
-            return redirect('home')
+            return redirect('Home')
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists!! Please try another email.")
         
@@ -40,7 +41,7 @@ def signup(request):
         
         if not username.isalnum():
             messages.error(request, "Username should only contain letters and numbers!!")
-            return redirect('home')
+            return redirect('Home')
         
         
         myuser = User.objects.create_user(username, email, pass1)
@@ -76,15 +77,22 @@ def signin(request):
             return render(request, "authentication/index.html",{"fname":fname})
         else:
             messages.error(request, "Bad Credentials!!")
-            return redirect('home')
+            return redirect('Home')
     
     return render(request, "authentication/signin.html")
 
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Sucessfully!!")
-    return redirect('home')
+    return redirect('Home')
 
+def Contact(request):
+    return render(request, "contact.html")
+
+def About(request):
+    return render(request, "about.html")
+
+    
 def tasks(request):
     """
     Return a JSON response with all tasks

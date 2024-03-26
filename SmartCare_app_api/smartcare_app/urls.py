@@ -22,8 +22,10 @@ urlpatterns = [
 #     path("remove/<int:pk>/", views.delete_task,
 #          name="delete_task"),
     
-    path('', views.home, name='home'),
+    path('', views.Home, name='Home'),
     path('signup', views.signup, name='signup'),
     path('signin', views.signin, name='signin'),
     path('signout/', views.signout, name='signout'),
+    path('contact/', views.Contact, name='Contact'),
+    path('about/', views.About, name='About'),
 ]
