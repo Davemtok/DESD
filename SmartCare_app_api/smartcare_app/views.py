@@ -90,7 +90,7 @@ def Contact(request):
     return render(request, "contact.html")
 
 def About(request):
-    return redirect(request, "about.html")
+    return render(request, "about.html")
 
     
 def tasks(request):
