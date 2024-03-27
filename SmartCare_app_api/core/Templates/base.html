@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartCare Surgery</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                {% if not request.user.is_authenticated %}
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'user_login' %}">Login</a></li>
+                {% else %}
+                    <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

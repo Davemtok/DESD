@@ -18,6 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    path("", include("smartcare_app.urls")),
+    path('doctors/', include(('doctors.urls', 'doctors'), namespace='doctors')),
+    path('nurses/', include(('nurses.urls','nurses'), namespace='nurses')),
+    path('patients/', include(('patients.urls','patients'), namespace='patients')),
+    path("core/", include("core.urls")),
 ]

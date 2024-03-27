@@ -36,6 +36,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
 
+AUTH_USER_MODEL = 'core.User'
+
 
 # Application definition
 
@@ -46,7 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'smartcare_app',
+    'core',
+    'patients',
+    'doctors',
+    'nurses',    
 ]
 
 MIDDLEWARE = [
