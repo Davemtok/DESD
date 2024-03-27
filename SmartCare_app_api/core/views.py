@@ -13,8 +13,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
 
-# def home(request):
-#     return render(request, 'core/home.html')
+def home(request):
+    return render(request, 'base.html')
 
 def register(request):
     if request.method == 'POST':
@@ -60,7 +60,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import logout
 def user_logout(request):
     logout(request)  # This will log out the current user
-    return redirect('user_login')  # Redirect to login page or home page after logout
+    return redirect('home')  # Redirect to login page or home page after logout
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required

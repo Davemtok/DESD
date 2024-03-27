@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from core.views import home  # Import the home view from core app
+
 
 urlpatterns = [
+    path('', home, name='home'),  # Home page at the root URL
     path('admin/', admin.site.urls),
     path('doctors/', include(('doctors.urls', 'doctors'), namespace='doctors')),
     path('nurses/', include(('nurses.urls','nurses'), namespace='nurses')),
