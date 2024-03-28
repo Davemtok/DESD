@@ -2,5 +2,21 @@
 
 {% block content %}
 <h2>Patient Dashboard</h2>
-<p>Welcome, {{ request.user.username }}. You are logged in as a Patient.</p>
+
+<!-- Other dashboard content -->
+
+<h3>Your Appointments</h3>
+
+{% if appointments %}
+    <ul>
+        {% for appointment in appointments %}
+            <li>
+                With {{ appointment.provider.username }} on {{ appointment.appointment_date }} at {{ appointment.appointment_time }} - Status: {{ appointment.get_status_display }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no appointments.</p>
+{% endif %}
+
 {% endblock %}

@@ -76,3 +76,15 @@ def edit_appointment(request, appointment_id):
         form = AppointmentEditForm(instance=appointment)
     
     return render(request, 'edit_appointment.html', {'form': form})
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Appointment
+
+@login_required
+def appointment_list(request):
+    # Filter appointments to only those where the current user is the patient
+    appointments = Appointment.objects.filter(patient=request.user).order_by('appointment_date', 'appointment_time')
+
+    return render(request, 'appointment_list.html', {'appointments': appointments})
