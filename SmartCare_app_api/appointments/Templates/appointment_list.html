@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Appointment List</h2>
+
+{% if appointments %}
+    <table>
+        <thead>
+            {% if request.user.is_doctor %}
+            <tr>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% else %}
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% endif %}
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                {% if request.user.is_doctor %}
+                <!-- For doctors, showing patient info -->
+                <td>{{ appointment.patient.username }}</td>
+                <td>{{ appointment.appointment_date }}</td>
+                <td>{{ appointment.appointment_time }}</td>
+                <td>{{ appointment.get_status_display }}</td>
+                <td>
+                    <a href="{% url 'appointments:edit_appointment' appointment.id %}">Edit</a>
+                </td>
+                {% else %}
+                <!-- For patients, showing doctor info -->
+                <td>{{ appointment.provider.username }}</td>
+                <td>{{ appointment.appointment_date }}</td>
+                <td>{{ appointment.appointment_time }}</td>
+                <td>{{ appointment.get_status_display }}</td>
+                <td>
+                    <!-- Potentially different actions for patients -->
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No appointments found.</p>
+{% endif %}
+
+{% endblock %}

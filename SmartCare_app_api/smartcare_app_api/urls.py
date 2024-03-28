@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from core.views import home  # Import the home view from core app
+from appointments.views import book_appointment,appointment_list  # Import the home view from core app
+
 
 
 urlpatterns = [
     path('', home, name='home'),  # Home page at the root URL
+    path('book/', book_appointment, name='book_appointment'),
+    path('list/', appointment_list, name='appointment_list'),
+    path('appointments/', include('appointments.urls', namespace='appointments')),  # Include the appointments URLs
     path('admin/', admin.site.urls),
     path('doctors/', include(('doctors.urls', 'doctors'), namespace='doctors')),
     path('nurses/', include(('nurses.urls','nurses'), namespace='nurses')),
