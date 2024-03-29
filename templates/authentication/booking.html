@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Booking Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center; /* Center align the form contents */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], input[type="date"], input[type="time"], textarea, select {
+            width: calc(100% - 20px); /* Subtracting padding */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .alert {
+            text-align: center; 
+            margin-bottom: 20px; 
+        }
+        .home-link {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .home-link a {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            float: left;
+        }
+        .home-link a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-link">
+        <a href="/">Home</a>
+    </div>
+    <h1>Book an Appointment</h1>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <form action="booking" method="POST">
+        {% csrf_token %}
+        <label for="email">Subject:</label>
+        <input type="text" id="Subject" name="Subject" required>
+
+        <label for="date">Appointment Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">Appointment Time:</label>
+        <select id="time" name="time" required>
+            <option value="">Select a time</option>
+        </select>
+
+        <label for="doctor">Select Doctor:</label>
+        <select id="doctor" name="doctor" required>
+            <option value="">Select a doctor</option>
+            <option value="Dr. Smith">Dr. Smith</option>
+            <option value="Dr. Johnson">Dr. Johnson</option>
+            <option value="Dr. Williams">Dr. Williams</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="comment">Comments:</label>
+        <textarea id="comment" name="comment" rows="4" style="width: calc(100% - 20px);" required></textarea>
+
+        <input type="submit" value="Book Appointment">
+    </form>
+
+    <script>
+        // Function to generate time options with 30-minute intervals
+        function generateTimeOptions() {
+            var select = document.getElementById("time");
+            var startTime = new Date();
+            startTime.setHours(8); // Start time (e.g., 8:00 AM)
+            startTime.setMinutes(0);
+            var endTime = new Date();
+            endTime.setHours(17); // End time (e.g., 5:00 PM)
+            endTime.setMinutes(0);
+            var currentTime = new Date(startTime);
+
+            while (currentTime <= endTime) {
+                var option = document.createElement("option");
+                var hours = currentTime.getHours();
+                var minutes = currentTime.getMinutes();
+                var timeString = ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2);
+                option.text = timeString;
+                option.value = timeString;
+                select.appendChild(option);
+                currentTime.setMinutes(currentTime.getMinutes() + 30); // Increment by 30 minutes
+            }
+        }
+
+        // Call the function to generate time options
+        generateTimeOptions();
+    </script>
+</body>
+</html>

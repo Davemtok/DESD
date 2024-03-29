@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings for Current Day</title>
+</head>
+<body>
+    <h1>Bookings for Today</h1>
+    {% if bookings %}
+        <ul>
+            {% for booking in bookings %}
+                <li>
+                    Subject: {{ booking.subject }}<br>
+                    Date: {{ booking.appointment_date }}<br>
+                    Time: {{ booking.appointment_time }}<br>
+                    Doctor: {{ booking.doctor }}<br>
+                    Comments: {{ booking.comments }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings for today.</p>
+    {% endif %}
+</body>
+</html>

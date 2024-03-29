@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Bookings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .home-link {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .home-link a {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            float: left;
+        }
+        .home-link a:hover {
+            background-color: #45a049;
+        }
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .booking-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .booking-details {
+            margin-bottom: 10px;
+        }
+        form {
+            text-align: center;
+        }
+        input[type="submit"] {
+            background-color: #ff3333;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-link">
+        <a href="/">Home</a>
+    </div>
+    <h1>Your Bookings</h1>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <ul class="booking-grid">
+    {% for booking in bookings %}
+        <li class="booking-item">
+            <div class="booking-details">
+                <strong>Subject:</strong> {{ booking.subject }}<br>
+                <strong>Date:</strong> {{ booking.appointment_date }}<br>
+                <strong>Time:</strong> {{ booking.appointment_time }}<br>
+                <strong>Doctor:</strong> {{ booking.doctor }}<br>
+                <strong>Comments:</strong> {{ booking.comments }}<br>
+            </div>
+            <form action="{% url 'bookingCancelMethod' booking.appointment_date booking.appointment_time %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Cancel Booking">
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
