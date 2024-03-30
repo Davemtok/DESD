@@ -3,6 +3,10 @@ from django.conf import settings
 import datetime
 from datetime import datetime, timedelta
 
+from .models import Appointment, Prescription
+from .forms import AppointmentBookingForm, AppointmentEditForm, PrescriptionForm
+
+
 from django.urls import reverse
 
 
@@ -84,7 +88,60 @@ from .models import Appointment
 
 @login_required
 def appointment_list(request):
-    # Filter appointments to only those where the current user is the patient
-    appointments = Appointment.objects.filter(patient=request.user).order_by('appointment_date', 'appointment_time')
+    if request.user.is_doctor:  # Ensure your User model has an 'is_doctor' attribute or adjust accordingly
+        appointments = Appointment.objects.filter(provider=request.user).order_by('appointment_date', 'appointment_time')
+    else:
+        appointments = Appointment.objects.filter(patient=request.user).order_by('appointment_date', 'appointment_time')
 
     return render(request, 'appointment_list.html', {'appointments': appointments})
+
+
+@login_required
+def issue_prescription(request, appointment_id):
+    appointment = get_object_or_404(Appointment, pk=appointment_id)
+    if request.method == 'POST':
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            prescription = form.save(commit=False)
+            prescription.appointment = appointment
+            prescription.prescribed_by = request.user
+            prescription.prescribed_to = appointment.patient
+            prescription.save()
+            messages.success(request, "Prescription issued successfully.")
+            return redirect('appointments:appointment_detail', appointment_id=appointment.id)
+    else:
+        form = PrescriptionForm()
+    return render(request, 'issue_prescription.html', {'form': form, 'appointment': appointment})
+
+from django.shortcuts import get_object_or_404, render
+from .models import Appointment
+
+from django.shortcuts import render, get_object_or_404
+from .models import Appointment
+
+def appointment_detail(request, appointment_id):
+    appointment = get_object_or_404(Appointment, pk=appointment_id)
+    # Assuming `prescriptions` is the related_name for the Prescription model
+    prescriptions = appointment.prescriptions.all()
+    return render(request, 'appointment_detail.html', {
+        'appointment': appointment,
+        'prescriptions': prescriptions,
+    })
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Appointment, Prescription
+
+@login_required
+def my_health_overview(request):
+    # Fetch appointments and prescriptions for the logged-in user
+    appointments = Appointment.objects.filter(patient__user=request.user)
+    prescriptions = Prescription.objects.filter(patient__user=request.user)
+    
+    # Pass both to the template
+    return render(request, 'my_health_overview.html', {
+        'appointments': appointments,
+        'prescriptions': prescriptions
+    })
+
+

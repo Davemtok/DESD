@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 600px; /* Adjust width as needed */
+        margin-top: 0px; /* Reduced to 0px to move the box right to the top */
+        margin-left: 10px; /* Adjust left margin if you also want it closer to the left edge */
+        /* Additional adjustments for positioning if needed */
+    }
+
+    .prescription-form-box {
+        padding: 20px;
+        border: 1px solid #ccc; /* Example border */
+        border-radius: 5px; /* Rounded corners */
+        background-color: #f9f9f9; /* Light background */
+    }
+
+    .appointment-details {
+        margin-bottom: 20px; /* Space between appointment details and the form */
+    }
+</style>
+
+<div class="container" style="margin-top: 0; max-width: 600px; margin-left: 10px;">
+    <div class="prescription-form-box">
+        <h2>Issue Prescription for Appointment</h2>
+        <div class="appointment-details">
+            <h3>Appointment Details:</h3>
+            <p><strong>Patient:</strong> {{ appointment.patient.username }}</p>
+            <p><strong>Date:</strong> {{ appointment.appointment_date }}</p>
+            <p><strong>Time:</strong> {{ appointment.appointment_time }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Prescription Details:</legend>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Issue Prescription</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

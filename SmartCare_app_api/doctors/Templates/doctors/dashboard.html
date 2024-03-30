@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Doctor Dashboard</h2>
-<p>Welcome, {{ request.user.username }}. You are logged in as a Doctor.</p>
+<h1>Welcome Doctor {{ request.user.username }}</h1>
+<h2>My Appointments</h2>
+{% if appointments %}
+    <ul>
+    {% for appointment in appointments %}
+        <li>
+            Appointment with {{ appointment.patient.username }} on {{ appointment.appointment_date }} at {{ appointment.appointment_time }}. Status: {{ appointment.status }}.
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no upcoming appointments.</p>
+{% endif %}
 {% endblock %}

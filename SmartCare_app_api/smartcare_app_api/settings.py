@@ -88,27 +88,14 @@ WSGI_APPLICATION = 'smartcare_app_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'db',  # Matches POSTGRES_DB
-#         'USER': 'postgres',  # Matches POSTGRES_USER
-#         'PASSWORD': 'postgres',  # Matches POSTGRES_PASSWORD
-#         'HOST': 'db',  # Matches the service name
-#         'PORT': '5432',
-#     }
-# }
-
-import os
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'db'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
-        'HOST': 'db' if inside_docker else 'localhost',
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'NAME': 'db',  # Matches POSTGRES_DB
+        'USER': 'postgres',  # Matches POSTGRES_USER
+        'PASSWORD': 'postgres',  # Matches POSTGRES_PASSWORD
+        'HOST': 'db' if inside_docker else 'localhost',  # Matches the service name
+        'PORT': '5432',
     }
 }
 

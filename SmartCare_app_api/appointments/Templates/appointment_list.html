@@ -12,7 +12,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Actions</th>  <!-- Assuming doctors can take actions like editing or issuing prescriptions -->
             </tr>
             {% else %}
             <tr>
@@ -20,7 +20,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Actions</th>  <!-- Actions column for potential future use, e.g., cancel appointment -->
             </tr>
             {% endif %}
         </thead>
@@ -34,7 +34,8 @@
                 <td>{{ appointment.appointment_time }}</td>
                 <td>{{ appointment.get_status_display }}</td>
                 <td>
-                    <a href="{% url 'appointments:edit_appointment' appointment.id %}">Edit</a>
+                    <a href="{% url 'appointments:edit_appointment' appointment.id %}">Edit</a> | 
+                    <a href="{% url 'appointments:issue_prescription' appointment_id=appointment.id %}">Issue Prescription</a>
                 </td>
                 {% else %}
                 <!-- For patients, showing doctor info -->

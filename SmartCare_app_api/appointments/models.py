@@ -23,3 +23,19 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient}'s appointment with {self.provider} on {self.appointment_date} at {self.appointment_time}"
 
+class Prescription(models.Model):
+    appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, related_name='prescriptions')
+    prescribed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='prescribed_prescriptions')
+    prescribed_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_prescriptions')
+    medication = models.CharField(max_length=255)
+    dosage = models.CharField(max_length=255)
+    instructions = models.TextField()
+    date_issued = models.DateField(auto_now_add=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.medication} to {self.prescribed_to.username} by {self.prescribed_by.username}"
+
+
+
+
