@@ -1,23 +1,72 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h3 {
+            text-align: center;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .alert-dismissable .close {
+            position: relative;
+            top: -2px;
+            right: -21px;
+            color: inherit;
+        }
+        .alert-dismissable .close:hover {
+            color: #000;
+        }
+        .alert-dismissable .close:focus {
+            outline: 0;
+            text-decoration: none;
+        }
+        h3 {
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    {% for message in messages%}
+    {% for message in messages %}
     <div class="alert alert-{{message.tags}} alert-dismissable fade show" role="alert">
-    <strong>Message: </strong> {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="close">
-    <span aria-hidden="true">&times;</span>
-    </button>
+        <strong>Message: </strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endfor %}
     <h3>Welcome to the SmartCare Website</h3>
@@ -25,13 +74,19 @@
     {% if user.is_authenticated %}
     <h3>HELLO {{fname}}</h3>
     <h4>You're successfully logged in.</h4>
-    <button type="submit"><a href="/booking">Make Booking</a></button>
-    <button type="submit"><a href="/bookingCancel">cancel Booking</a></button>
-    <button type="submit"><a href="/signout">SignOut</a></button>
-
+    <div class="button-container">
+        <button type="submit"><a href="/booking">Make Booking</a></button>
+        <button type="submit"><a href="/bookingCancel">cancel Booking</a></button>
+        <button type="submit"><a href="/BookingScheduelView">BookingScheduelView</a></button>
+        <button type="submit"><a href="/prescription">make prescription</a></button>
+        <button type="submit"><a href="/displayprescription">display prescription</a></button>
+        <button type="submit"><a href="/signout">SignOut</a></button>
+    </div>
     {% else %}
-    <button type="submit"><a href="/signup">SignUp</a></button>
-    <button type="submit"><a href="/signin">SignIn</a></button>
+    <div class="button-container">
+        <button type="submit"><a href="/signin">signin</a></button>
+        <button type="submit"><a href="/signup">signup</a></button>
+    </div>
     {% endif %}
 </body>
 </html>

@@ -28,3 +28,9 @@ class Booking(models.Model):
 
     def __str__(self):
         return self.subject
+
+class Prescription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    medicine = models.CharField(max_length=100)
+    dosage = models.CharField(max_length=50)
+    duration = models.PositiveIntegerField()

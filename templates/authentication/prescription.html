@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: calc(100% - 20px); /* Subtracting padding */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        a {
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">Home</a>
+    <h1>Prescription</h1>
+    {% if message %}
+    <p class="{{ message.type }}">{{ message.text }}</p>
+    {% endif %}
+    <form action="/prescription" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="fname">Patient's First Name:</label>
+            <input type="text" id="fname" name="fname" placeholder="Enter Patient's First Name" required>
+        </div>
+        <div class="form-group">
+            <label for="lname">Patient's Last Name:</label>
+            <input type="text" id="lname" name="lname" placeholder="Enter Patient's Last Name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Patient's Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter Patient's Email" required>
+        </div>
+        <div class="form-group">
+            <label for="medicine">Medicine:</label>
+            <input type="text" id="medicine" name="medicine" placeholder="Enter Medicine" required>
+        </div>
+        <div class="form-group">
+            <label for="dosage">Dosage:</label>
+            <input type="text" id="dosage" name="dosage" placeholder="Enter Dosage" required>
+        </div>
+        <div class="form-group">
+            <label for="duration">Duration (in days):</label>
+            <input type="text" id="duration" name="duration" placeholder="Enter Duration" required>
+        </div>
+        <button type="submit">Submit Prescription</button>
+    </form>
+</body>
+</html>

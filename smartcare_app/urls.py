@@ -31,5 +31,8 @@ urlpatterns = [
     path('bookingCancel', views.bookingCancel, name='bookingCancel'),
     path('bookings/current_day/', views.BookingScheduelView, name='bookings_for_current_day'),
     path('cancel-booking/<str:date>/<str:time>/', views.bookingCancelMethod, name='bookingCancelMethod'),
+    path('BookingScheduelView', views.BookingScheduelView, name='BookingScheduelView'),
+    path('prescription', views.prescription, name='prescription'),
+    path('displayprescription', views.displayprescription, name="displayprescription")
 
 ]

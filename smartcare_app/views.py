@@ -2,7 +2,7 @@ import json
 from telnetlib import LOGOUT
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .models import Task
+from .models import Task, Prescription
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
@@ -29,6 +29,7 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
+        usertype = request.POST['usertype']
         
         if User. objects.filter(username=username).exists():
             messages.error(request, "Username already exists!! Please try another username.")
@@ -46,10 +47,15 @@ def signup(request):
             messages.error(request, "Username should only contain letters and numbers!!")
             return redirect('home')
         
+       
+
+
         
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
+        myuser.is_staff = "t"
+        
         myuser.save()
         messages.success(request, "Your Account has been created succesfully!! Please check your email to confirm your email address in order to activate your account.")
         
@@ -58,7 +64,7 @@ def signup(request):
         message = "Hello " + myuser.first_name + "!!\n" + "Welcome to SmartCare.\n Thank you for visiting our website \n We have also sent you a confirmation email. Please confirm your email address to activate your account."
         from_email = settings.EMAIL_HOST_USER
         to_list = [myuser.email]
-        send_mail(subject, message, from_email, to_list, fail_silently=False)
+        #send_mail(subject, message, from_email, to_list, fail_silently=False)
         
         
         return redirect('signin')
@@ -76,8 +82,8 @@ def signin(request):
         if user is not None:
             login(request, user)
             fname = user.first_name
-            # messages.success(request, "Logged In Sucessfully!!")
             return render(request, "authentication/index.html",{"fname":fname})
+        
         else:
             messages.error(request, "Bad Credentials!!")
             return redirect('home')
@@ -275,6 +281,47 @@ def BookingScheduelView(request):
     else:
         messages.error(request, "You must be a member of staff to view this")
         return redirect('home')
+    
+def prescription(request):
+    user = request.user
+    if request.user.is_staff:
+        if request.method == 'POST':
+            post_fname = request.POST.get('fname')
+            post_lname = request.POST.get('lname')
+            post_email = request.POST.get('email')
+            post_medicine = request.POST.get('medicine')
+            post_dosage = request.POST.get('dosage')  # Corrected field name
+            post_duration = request.POST.get('duration')  # Corrected field name
+
+            patient_user = User.objects.filter(first_name=post_fname, last_name=post_lname, email=post_email).first()
+            if patient_user is not None:
+                prescription = Prescription.objects.create(
+                    medicine=post_medicine,
+                    dosage=post_dosage,
+                    duration=post_duration,
+                    user=patient_user
+                )
+                message = {'text': 'Prescription has been saved successfully!', 'type': 'success'}
+            else:
+                message = {'text': 'User not found or invalid user details.', 'type': 'error'}
+        else:
+            message = {'text': 'An error occurred. Please try again.', 'type': 'error'}
+        
+        context = {'message': message}
+        return render(request, 'authentication/prescription.html', context)
+    else:
+        messages.error(request, "You must be a member of staff to view this")
+        return redirect('home')
+
+def displayprescription(request):
+    user = request.user   
+    user_id = request.user.id
+    prescriptions = Prescription.objects.filter(user_id=user_id)
+    return render(request, "authentication/displayprescription.html", {'prescriptions': prescriptions})
+
+
+
+
 
 
 def addBookingToCalander(request):
