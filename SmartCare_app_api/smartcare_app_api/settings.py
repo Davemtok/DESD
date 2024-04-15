@@ -65,6 +65,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    # Ensure other backends are correctly configured
+]
+
+
 ROOT_URLCONF = 'smartcare_app_api.urls'
 
 TEMPLATES = [
