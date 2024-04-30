@@ -69,9 +69,7 @@
         </button>
     </div>
     {% endfor %}
-    <h3>Welcome to the SmartCare Website</h3>
-
-    {% if user.is_authenticated %}
+    <h3>Welcome to the SmartCare Pharacy{% if user.is_authenticated %}
     <h3>HELLO {{fname}}</h3>
     <h4>You're successfully logged in.</h4>
     <div class="button-container">
