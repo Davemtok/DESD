@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Prescriptions</h2>
+
+{% if prescriptions %}
+    <ul>
+    {% for prescription in prescriptions %}
+        <li>
+            <br>
+            <strong>Medication:</strong> {{ prescription.medication }}<br>
+            <strong>Dosage:</strong> {{ prescription.dosage }}<br>
+            <strong>Prescribed on:</strong> {{ prescription.date_issued }}<br>
+            <p class="list-group-item-text"><strong>Instructions:</strong> {{ prescription.instructions }}</p>
+            <p class="list-group-item-text"><strong>Cost: </strong> ${{ prescription.cost }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No prescriptions found.</p>
+{% endif %}
+
+{% endblock %}

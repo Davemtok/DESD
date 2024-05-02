@@ -11,4 +11,7 @@ urlpatterns = [
     path('doctors/', include('doctors.urls')),
     path('nurses/', include('nurses.urls')),
     path('patients/', include('patients.urls')),
+    # In urls.py
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
 ]

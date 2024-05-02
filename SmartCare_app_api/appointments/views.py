@@ -30,10 +30,10 @@ def calculate_available_slots(events, start_of_day, end_of_day, appointment_dura
     
     return available_slots
 
-from django.shortcuts import render, redirect
-from .forms import AppointmentBookingForm
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import AppointmentBookingForm
 
 @login_required
 def book_appointment(request):
@@ -42,7 +42,6 @@ def book_appointment(request):
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.patient = request.user
-            appointment.status = 'scheduled'  # Assuming 'scheduled' is a valid status
             appointment.save()
             messages.success(request, 'Your appointment has been booked.')
             return redirect("appointments:appointment_list")  # Adjust to your named URL for the appointments list
@@ -50,12 +49,13 @@ def book_appointment(request):
         form = AppointmentBookingForm()
     return render(request, 'book_appointment.html', {'form': form})
 
+
 from django.shortcuts import render
 from .models import Appointment
 
 @login_required
 def appointment_list(request):
-    if request.user.is_doctor:
+    if request.user.is_doctor or request.user.is_nurse:
         # Doctors see appointments where they are the provider
         appointments = Appointment.objects.filter(provider=request.user).order_by('appointment_date', 'appointment_time')
     else:
@@ -143,5 +143,16 @@ def my_health_overview(request):
         'appointments': appointments,
         'prescriptions': prescriptions
     })
+
+
+@login_required
+def view_prescriptions(request):
+    # Fetch all appointments where the current user is the patient
+    appointments = Appointment.objects.filter(patient=request.user)
+    
+    # Fetch all prescriptions related to those appointments
+    prescriptions = Prescription.objects.filter(appointment__in=appointments).order_by('-date_issued')  # Assuming there's a 'date_issued' field in Prescription
+    
+    return render(request, 'prescriptions_list.html', {'prescriptions': prescriptions})
 
 

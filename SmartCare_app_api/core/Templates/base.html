@@ -191,11 +191,20 @@
                     <li><a href="{% url 'register' %}">Register</a></li>
                     <li><a href="{% url 'user_login' %}">Login</a></li>
                 {% else %}
-                    <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                    {% if request.user.is_superuser %}
+                        <li><a href="{% url 'admin_dashboard' %}">Admin Page</a></li>
+                    {% elif request.user.is_patient%}
+                    <li><a href="{% url 'patient_dashboard' %}">Home</a></li>
+                    {% elif request.user.is_nurse%}
+                    <li><a href="{% url 'nurse_dashboard' %}">Home</a></li>
+                    {% elif request.user.is_doctor%}
+                    <li><a href="{% url 'doctor_dashboard' %}">Home</a></li>
+                    {% else %}
                     <li><a href="{% url 'home' %}">Home</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'user_logout' %}">Logout</a></li>
                     <li><a href="{% url 'appointments:appointment_list' %}">Bookings</a></li>
                     <li><a href="{% url 'appointments:book_appointment' %}">Make a Booking</a></li> <!-- Link to make a new booking -->
-
                 {% endif %}
             </ul>
         </nav>

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body { font-family: Arial, sans-serif; }
+    h2, h3 { color: #333; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    form.user-form { margin-bottom: 20px; display: contents; }
+    input[type="text"], input[type="email"], input[type="checkbox"], select { margin: 5px 0; padding: 8px; width: auto; }
+    button { background-color: #4CAF50; color: white; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; }
+    .form-inline { display: flex; align-items: center; justify-content: space-between; }
+    .form-inline label { margin-right: 10px; }
+    .hidden { display: none; }
+    .checkbox-group { display: flex; align-items: center; }
+    .checkbox-group input { width: auto; }
+</style>
+
+<h2>Admin Dashboard</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Approved</th>
+            <th>Superuser</th>
+            <th>Staff</th>
+            <th>Active</th>
+            <th>Doctor</th>
+            <th>Nurse</th>
+            <th>Patient</th>
+            <th>Private Client</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <form method="post">
+                {% csrf_token %}
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td><input type="checkbox" name="is_approved" {% if user.is_approved %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_superuser" {% if user.is_superuser %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_staff" {% if user.is_staff %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_active" {% if user.is_active %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_doctor" {% if user.is_doctor %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_nurse" {% if user.is_nurse %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_patient" {% if user.is_patient %}checked{% endif %}></td>
+                <td><input type="checkbox" name="is_private_client" {% if user.is_private_client %}checked{% endif %}></td>
+                <td>
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button type="submit" name="update_user">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

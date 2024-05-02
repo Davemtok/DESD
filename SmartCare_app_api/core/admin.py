@@ -5,8 +5,8 @@ from django.contrib import admin
 from .models import User
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'is_approved', 'is_active', 'is_doctor', 'is_nurse', 'is_patient')
-    list_filter = ('is_approved', 'is_active', 'is_doctor', 'is_nurse', 'is_patient')
+    list_display = ('username', 'email', 'is_approved', 'is_active', 'is_doctor', 'is_nurse', 'is_patient','is_superuser')
+    list_filter = ('is_approved', 'is_active', 'is_doctor', 'is_nurse', 'is_patient','is_superuser')
     search_fields = ('username', 'email')
     actions = ['approve_users']
 

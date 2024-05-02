@@ -17,6 +17,7 @@ class Appointment(models.Model):
     provider = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='appointments_as_provider', on_delete=models.CASCADE)
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
+    description = models.TextField(blank=True, null=True)  # Field to store the patient's description
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='scheduled')
     # You can add more fields as needed, for instance, a field for notes or appointment type
 
