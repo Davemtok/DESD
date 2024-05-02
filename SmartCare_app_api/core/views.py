@@ -80,26 +80,32 @@ def admin_dashboard(request):
     users = User.objects.all().order_by('username')  # List users ordered by username
 
     if request.method == 'POST':
-        # Handle updates from form submissions
         user_id = request.POST.get('user_id')
         user = get_object_or_404(User, pk=user_id)
 
-        # Update user properties based on checkboxes
-        user.is_approved = 'is_approved' in request.POST
-        user.is_superuser = 'is_superuser' in request.POST
-        user.is_staff = 'is_staff' in request.POST
-        user.is_active = 'is_active' in request.POST
-        user.is_doctor = 'is_doctor' in request.POST
-        user.is_nurse = 'is_nurse' in request.POST
-        user.is_patient = 'is_patient' in request.POST
-        user.is_private_client = 'is_patient' in request.POST
+        if 'update_user' in request.POST:
+            # Update user properties based on checkboxes
+            user.is_approved = 'is_approved' in request.POST
+            user.is_superuser = 'is_superuser' in request.POST
+            user.is_staff = 'is_staff' in request.POST
+            user.is_active = 'is_active' in request.POST
+            user.is_doctor = 'is_doctor' in request.POST
+            user.is_nurse = 'is_nurse' in request.POST
+            user.is_patient = 'is_patient' in request.POST
+            user.is_private_client = 'is_private_client' in request.POST
 
-        # Save the updated user information
-        user.save()
-        messages.success(request, f"Updated {user.username}'s profile successfully.")
+            # Save the updated user information
+            user.save()
+            messages.success(request, f"Updated {user.username}'s profile successfully.")
+        
+        elif 'delete_user' in request.POST:
+            username = user.username  # Capture username before deletion for the message
+            user.delete()
+            messages.success(request, f"Deleted {username} successfully.")
+
         return redirect('admin_dashboard')
 
-    # Render the admin dashboard page with the user list
     return render(request, 'admin_dashboard.html', {'users': users})
+
 
 
