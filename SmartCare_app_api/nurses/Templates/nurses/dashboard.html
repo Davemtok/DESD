@@ -1,6 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Nurse Dashboard</h2>
-<p>Welcome, {{ request.user.username }}. You are logged in as a Nurse.</p>
+<h2>Nurse Dashboard - Your Appointments</h2>
+
+{% if appointments %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.patient.username }}</td>
+                <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+                <td>{{ appointment.appointment_time|date:"H:i" }}</td>
+                <td>{{ appointment.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No appointments found.</p>
+{% endif %}
+
 {% endblock %}

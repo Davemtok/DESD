@@ -12,21 +12,25 @@ User = get_user_model()
 
 class AppointmentBookingForm(forms.ModelForm):
     provider = forms.ModelChoiceField(
-        queryset=User.objects.filter(models.Q(is_doctor=True) | models.Q(is_nurse=True)),
+        queryset=User.objects.none(),  # Initially empty, set in __init__
         label="Provider",
         help_text="Select a doctor or a nurse for the appointment."
     )
     appointment_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
     appointment_time = forms.TimeField(widget=forms.TextInput(attrs={'type': 'time'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Any specific issues or requests?'}), required=False)
+    is_surgery = forms.BooleanField(required=False, help_text="Check if this is a surgical appointment")
 
     class Meta:
         model = Appointment
-        fields = ['provider', 'appointment_date', 'appointment_time', 'description']
+        fields = ['provider', 'appointment_date', 'appointment_time', 'description', 'is_surgery']
 
     def __init__(self, *args, **kwargs):
         super(AppointmentBookingForm, self).__init__(*args, **kwargs)
-        self.fields['provider'].queryset = User.objects.filter(models.Q(is_doctor=True) | models.Q(is_nurse=True))
+        # Set the provider queryset to include only doctors and nurses
+        self.fields['provider'].queryset = User.objects.filter(
+            models.Q(is_doctor=True) | models.Q(is_nurse=True)
+        )
 
 
         

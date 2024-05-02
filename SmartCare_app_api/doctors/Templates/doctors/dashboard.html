@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{% url 'daily_surgery_schedule' %}">View Daily Surgery Schedule</a>
 <h1>Welcome Doctor {{ request.user.username }}</h1>
 <h2>My Appointments</h2>
 {% if appointments %}

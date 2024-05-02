@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Daily Surgery Schedule</h2>
+
+{% if surgeries %}
+<form method="post">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for surgery in surgeries %}
+            <tr>
+                <td>{{ surgery.patient.username }}</td>
+                <td><input type="date" name="appointment_date" value="{{ surgery.appointment_date|date:'Y-m-d' }}"></td>
+                <td><input type="time" name="appointment_time" value="{{ surgery.appointment_time|date:'H:i' }}"></td>
+                <td><input type="text" name="description" value="{{ surgery.description }}"></td>
+                <td>
+                    <button type="submit" name="edit_surgery">Save Changes</button>
+                    <button type="submit" name="cancel_surgery" onclick="return confirm('Are you sure?');">Cancel</button>
+                    <input type="hidden" name="surgery_id" value="{{ surgery.id }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+{% else %}
+    <p>No surgeries scheduled.</p>
+{% endif %}
+
+{% endblock %}

@@ -5,9 +5,8 @@ from datetime import datetime, timedelta
 
 from .models import Appointment, Prescription
 from .forms import AppointmentBookingForm, AppointmentEditForm, PrescriptionForm
-
-
 from django.urls import reverse
+from django.utils import timezone
 
 
 def calculate_available_slots(events, start_of_day, end_of_day, appointment_duration=30):
@@ -156,3 +155,67 @@ def view_prescriptions(request):
     return render(request, 'prescriptions_list.html', {'prescriptions': prescriptions})
 
 
+from django.utils import timezone
+from django.shortcuts import render
+from .models import Appointment
+
+@login_required
+def daily_surgery_schedule(request):
+    if not request.user.is_doctor:
+        return render(request, 'error.html', {'message': 'Unauthorized access.'})
+
+    # Handle POST request for updates or cancellations
+    if request.method == 'POST':
+        if 'edit_surgery' in request.POST:
+            form = AppointmentBookingForm(request.POST, instance=get_object_or_404(Appointment, pk=request.POST.get('surgery_id'), is_surgery=True))
+            if form.is_valid():
+                form.save()
+        elif 'cancel_surgery' in request.POST:
+            surgery = get_object_or_404(Appointment, pk=request.POST.get('surgery_id'), is_surgery=True)
+            surgery.status = 'cancelled'
+            surgery.save()
+
+    # Regardless of POST or GET, load surgeries
+    surgeries = Appointment.objects.filter(provider=request.user, is_surgery=True).order_by('appointment_date', 'appointment_time')
+    return render(request, 'doctor_surgery_schedule.html', {'surgeries': surgeries})
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Appointment
+
+def cancel_appointment(request, id):
+    appointment = get_object_or_404(Appointment, pk=id)
+    # Ensure that the user has permission to cancel the appointment
+    if request.user == appointment.patient or request.user == appointment.provider:
+        appointment.status = 'cancelled'
+        appointment.save()
+        # Redirect to an appropriate page
+        return redirect('appointments:appointment_list')
+    else:
+        # Return an error message or redirect to a forbidden access page
+        return redirect('error_page')
+    
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from .models import Appointment
+from .forms import AppointmentBookingForm  # Ensure this form is created in forms.py
+
+@login_required
+def edit_surgery(request, id):
+    surgery = get_object_or_404(Appointment, pk=id, is_surgery=True)
+    if request.method == 'POST':
+        form = AppointmentBookingForm(request.POST, instance=surgery)
+        if form.is_valid():
+            form.save()
+            return redirect('appointments:daily_surgery_schedule')  # Adjust the redirect as necessary
+    else:
+        form = AppointmentBookingForm(instance=surgery)
+    return render(request, 'edit_surgery.html', {'form': form})
+
+@login_required
+def cancel_surgery(request, id):
+    surgery = get_object_or_404(Appointment, pk=id, is_surgery=True)
+    if request.method == 'POST':
+        surgery.status = 'cancelled'
+        surgery.save()
+        return redirect('appointments:daily_surgery_schedule')
+    return render(request, 'confirm_cancel_surgery.html', {'surgery': surgery})

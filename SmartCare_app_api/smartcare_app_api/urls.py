@@ -30,4 +30,6 @@ urlpatterns = [
     path('nurses/', include(('nurses.urls','nurses'), namespace='nurses')),
     path('patients/', include(('patients.urls','patients'), namespace='patients')),
     path("core/", include("core.urls")),
+    path('appointments/', include('appointments.urls', namespace='appointments')),
+
 ]

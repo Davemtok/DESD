@@ -20,6 +20,7 @@ class Appointment(models.Model):
     description = models.TextField(blank=True, null=True)  # Field to store the patient's description
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='scheduled')
     # You can add more fields as needed, for instance, a field for notes or appointment type
+    is_surgery = models.BooleanField(default=False, help_text="True if the appointment is for a surgery.")
 
     def __str__(self):
         return f"{self.patient}'s appointment with {self.provider} on {self.appointment_date} at {self.appointment_time}"

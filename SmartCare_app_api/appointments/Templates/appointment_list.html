@@ -6,20 +6,24 @@
 {% if appointments %}
     <table>
         <thead>
-            {% if request.user.is_doctor %}
+            {% if request.user.is_doctor or request.user.is_nurse %}
             <tr>
                 <th>Patient</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Type</th>
                 <th>Status</th>
                 <th>Description</th>
+                <th>Actions</th>
             </tr>
             {% else %}
             <tr>
-                <th>Doctor</th>
+                <th>Doctor/Nurse</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Type</th>
                 <th>Status</th>
+                <th>Description</th>
                 <th>Actions</th>  <!-- Actions column for potential future use, e.g., cancel appointment -->   
             </tr>
             {% endif %}
@@ -27,25 +31,39 @@
         <tbody>
             {% for appointment in appointments %}
             <tr>
-                {% if request.user.is_doctor %}
-                <!-- For doctors, showing patient info -->
+                {% if request.user.is_doctor or request.user.is_nurse %}
+                <!-- For doctors and nurses, showing patient info -->
                 <td>{{ appointment.patient.username }}</td>
                 <td>{{ appointment.appointment_date }}</td>
                 <td>{{ appointment.appointment_time }}</td>
-                <td>{{ appointment.get_status_display }}</td>
+                <td>
+                    {% if appointment.is_surgery %}
+                        Surgery
+                    {% else %}
+                        Regular Checkup
+                    {% endif %}
+                </td>                <td>{{ appointment.get_status_display }}</td>
                 <td>{{ appointment.description }}</td>
                 <td>
                     <a href="{% url 'appointments:edit_appointment' appointment.id %}">Edit</a> | 
                     <a href="{% url 'appointments:issue_prescription' appointment_id=appointment.id %}">Issue Prescription</a>
                 </td>
                 {% else %}
-                <!-- For patients, showing doctor info -->
+                <!-- For patients, showing doctor or nurse info -->
                 <td>{{ appointment.provider.username }}</td>
                 <td>{{ appointment.appointment_date }}</td>
                 <td>{{ appointment.appointment_time }}</td>
-                <td>{{ appointment.get_status_display }}</td>
                 <td>
-                    <!-- Potentially different actions for patients -->
+                    {% if appointment.is_surgery %}
+                        Surgery
+                    {% else %}
+                        Regular Checkup
+                    {% endif %}
+                </td>                <td>{{ appointment.get_status_display }}</td>
+                <td>{{ appointment.description }}</td>
+                <td>
+                    <!-- Potentially different actions for patients, such as cancel or reschedule -->
+                    <a href="{% url 'appointments:cancel_appointment' appointment.id %}">Cancel</a>
                 </td>
                 {% endif %}
             </tr>
